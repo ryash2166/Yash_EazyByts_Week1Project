@@ -62,39 +62,35 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      value: "hello@example.com",
-      href: "mailto:hello@example.com",
+      value: "sqyash786@gmail.com",
+      href: "mailto:sqyash786@gmail.com",
     },
     {
       icon: Phone,
       title: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+91 8758685229",
+      href: "tel:+918758685229",
     },
     {
       icon: MapPin,
       title: "Location",
-      value: "San Francisco, CA",
-      href: "#",
+      value: "Surat, Gujarat, India",
+      // href: "#",
     },
   ]
 
   const socialLinks = [
     {
       icon: Github,
-      href: "https://github.com",
+      href: "https://github.com/ryash2166",
       label: "GitHub",
     },
     {
       icon: Linkedin,
-      href: "https://linkedin.com",
+      href: "https://linkedin.com/in/yash-rakholiya-90b0a2314",
       label: "LinkedIn",
     },
-    {
-      icon: Twitter,
-      href: "https://twitter.com",
-      label: "Twitter",
-    },
+
   ]
 
   return (

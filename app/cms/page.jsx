@@ -1,42 +1,56 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Plus, Edit, Trash2, Eye, BarChart3, FileText, MessageSquare } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useAuth } from "@/components/auth-provider"
-import { useToast } from "@/hooks/use-toast"
-import { Navbar } from "@/components/navbar"
-import { ProjectForm } from "@/components/project-form"
-import { BlogForm } from "@/components/blog-form"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  BarChart3,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/components/auth-provider";
+import { useToast } from "@/hooks/use-toast";
+import { Navbar } from "@/components/navbar";
+import { ProjectForm } from "@/components/project-form";
+import { BlogForm } from "@/components/blog-form";
 
 export default function CMSPage() {
-  const { user, isLoading } = useAuth()
-  const router = useRouter()
-  const { toast } = useToast()
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
 
-  const [projects, setProjects] = useState([])
-  const [blogPosts, setBlogPosts] = useState([])
-  const [contacts, setContacts] = useState([])
-  const [showProjectForm, setShowProjectForm] = useState(false)
-  const [showBlogForm, setShowBlogForm] = useState(false)
-  const [editingProject, setEditingProject] = useState(null)
-  const [editingBlog, setEditingBlog] = useState(null)
+  const [projects, setProjects] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [editingBlog, setEditingBlog] = useState(null);
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/login")
+      router.push("/login");
     }
-  }, [user, isLoading, router])
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     if (user) {
-      fetchData()
+      fetchData();
     }
-  }, [user])
+  }, [user]);
 
   const fetchData = async () => {
     try {
@@ -44,21 +58,21 @@ export default function CMSPage() {
         fetch("/api/projects"),
         fetch("/api/blog"),
         fetch("/api/contact"),
-      ])
+      ]);
 
       const [projectsData, blogData, contactsData] = await Promise.all([
         projectsRes.json(),
         blogRes.json(),
         contactsRes.json(),
-      ])
+      ]);
 
-      setProjects(projectsData)
-      setBlogPosts(blogData)
-      setContacts(contactsData)
+      setProjects(projectsData);
+      setBlogPosts(blogData);
+      setContacts(contactsData);
     } catch (error) {
-      console.error("Error fetching data:", error)
+      console.error("Error fetching data:", error);
     }
-  }
+  };
 
   const deleteProject = async (id) => {
     try {
@@ -67,23 +81,23 @@ export default function CMSPage() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      })
+      });
 
       if (response.ok) {
-        setProjects(projects.filter((p) => p._id !== id))
+        setProjects(projects.filter((p) => p._id !== id));
         toast({
           title: "Project deleted",
           description: "The project has been successfully deleted.",
-        })
+        });
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to delete project.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const deleteBlogPost = async (id) => {
     try {
@@ -92,23 +106,23 @@ export default function CMSPage() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      })
+      });
 
       if (response.ok) {
-        setBlogPosts(blogPosts.filter((p) => p._id !== id))
+        setBlogPosts(blogPosts.filter((p) => p._id !== id));
         toast({
           title: "Blog post deleted",
           description: "The blog post has been successfully deleted.",
-        })
+        });
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to delete blog post.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -127,11 +141,11 @@ export default function CMSPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return null
+    return null;
   }
 
   const stats = [
@@ -159,7 +173,7 @@ export default function CMSPage() {
       icon: Eye,
       color: "text-orange-600",
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
@@ -171,7 +185,9 @@ export default function CMSPage() {
             <h1 className="text-3xl font-bold mb-2">
               Welcome back, <span className="gradient-text">{user.name}</span>
             </h1>
-            <p className="text-muted-foreground">Manage your portfolio content from this dashboard</p>
+            <p className="text-muted-foreground">
+              Manage your portfolio content from this dashboard
+            </p>
           </div>
 
           {/* Stats Cards */}
@@ -185,7 +201,9 @@ export default function CMSPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        {stat.title}
+                      </p>
                       <p className="text-2xl font-bold">{stat.value}</p>
                     </div>
                     <stat.icon className={`h-8 w-8 ${stat.color}`} />
@@ -197,7 +215,7 @@ export default function CMSPage() {
 
           {/* Content Management */}
           <Tabs defaultValue="projects" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-max grid-cols-3">
               <TabsTrigger value="projects">Projects</TabsTrigger>
               <TabsTrigger value="blog">Blog Posts</TabsTrigger>
               <TabsTrigger value="messages">Messages</TabsTrigger>
@@ -222,7 +240,11 @@ export default function CMSPage() {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.technologies.slice(0, 3).map((tech) => (
-                          <Badge key={tech} variant="secondary" className="text-xs">
+                          <Badge
+                            key={tech}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {tech}
                           </Badge>
                         ))}
@@ -237,13 +259,17 @@ export default function CMSPage() {
                           size="sm"
                           variant="outline"
                           onClick={() => {
-                            setEditingProject(project)
-                            setShowProjectForm(true)
+                            setEditingProject(project);
+                            setShowProjectForm(true);
                           }}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => deleteProject(project._id)}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => deleteProject(project._id)}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -268,11 +294,17 @@ export default function CMSPage() {
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle className="text-lg">{post.title}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {post.title}
+                          </CardTitle>
                           <CardDescription>{post.excerpt}</CardDescription>
                           <div className="flex gap-2 mt-2">
                             {post.tags.slice(0, 3).map((tag) => (
-                              <Badge key={tag} variant="secondary" className="text-xs">
+                              <Badge
+                                key={tag}
+                                variant="secondary"
+                                className="text-xs"
+                              >
                                 {tag}
                               </Badge>
                             ))}
@@ -283,13 +315,17 @@ export default function CMSPage() {
                             size="sm"
                             variant="outline"
                             onClick={() => {
-                              setEditingBlog(post)
-                              setShowBlogForm(true)
+                              setEditingBlog(post);
+                              setShowBlogForm(true);
                             }}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline" onClick={() => deleteBlogPost(post._id)}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => deleteBlogPost(post._id)}
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -309,7 +345,9 @@ export default function CMSPage() {
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle className="text-lg">{contact.subject}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {contact.subject}
+                          </CardTitle>
                           <CardDescription>
                             From: {contact.name} ({contact.email})
                           </CardDescription>
@@ -335,13 +373,13 @@ export default function CMSPage() {
         <ProjectForm
           project={editingProject}
           onClose={() => {
-            setShowProjectForm(false)
-            setEditingProject(null)
+            setShowProjectForm(false);
+            setEditingProject(null);
           }}
           onSave={() => {
-            fetchData()
-            setShowProjectForm(false)
-            setEditingProject(null)
+            fetchData();
+            setShowProjectForm(false);
+            setEditingProject(null);
           }}
         />
       )}
@@ -350,16 +388,16 @@ export default function CMSPage() {
         <BlogForm
           post={editingBlog}
           onClose={() => {
-            setShowBlogForm(false)
-            setEditingBlog(null)
+            setShowBlogForm(false);
+            setEditingBlog(null);
           }}
           onSave={() => {
-            fetchData()
-            setShowBlogForm(false)
-            setEditingBlog(null)
+            fetchData();
+            setShowBlogForm(false);
+            setEditingBlog(null);
           }}
         />
       )}
     </div>
-  )
+  );
 }
